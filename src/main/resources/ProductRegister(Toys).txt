@@ -1,0 +1,73 @@
+
+
+#
+ID 1001
+Name: Xylophone
+Color: Multycolor
+Photos: C:\Users\Alina\Desktop\EducationalTpysPhotos\Design & Drill Creative Workshop
+Meterial: Wood
+Type: Musician Educational toy
+Description:This cute croc includes a drum with two mallets, a xylophone,
+a guiro wooden block (played by rubbing stick along notches on snout) and a bell.
+Multiple kids can play at once to help foster a sense of rhythm while developing
+motor skills. 4 wonderful instruments in one, includes 2 mallets.
+Price: 2700
+Age: 2+
+
+
+#
+ID 1002
+Name: Interactive Globe
+Color: Blue, Multycolor
+Photos:
+Meterial: Wood, Paper
+Type: Geography Educational toy
+Description:The interactive world map pairs with an app that will let kids focus
+in on any region that interests them and learn more. There are more than
+1,000 world facts loaded up in the app for them to explore.
+Comes with a 10" globe, passport, stamp, country flag stickers and a detailed help guide.
+Price: 3500
+Age: 4+
+
+
+#
+ID 1003
+Name: Talking Microscope
+Photos: C:\Users\Alina\Desktop\EducationalTpysPhotos\Talking Microscope
+Color: Blue
+Meterial: Plastic
+Type: Sience Educational toy
+Kids can insert the slides to see beautiful, up-close images of wildlife.
+Then the voice of Bindi Irwin explains what they're looking at,
+so kids can learn science even if they don't know how to read yet.
+Price: 3000
+Age: 4+
+
+
+#
+ID 1004
+Name: Five Little Fishes
+Photos: C:\Users\Alina\Desktop\EducationalTpysPhotos\Five Little Fishes; C:\Users\Alina\Desktop\EducationalTpysPhotos\Five Little Fishes
+Color: Multycolor
+Meterial: Plastic
+Type: Educational toy
+Description: Kids choose a lily pad card, then use the rod to hook a fish.
+Each player tries to match the card to the fish they catch.
+The game helps promote turn-taking, following instructions, memory, matching, colors and more!
+Price: 1600
+Age: 3+
+
+
+#
+ID 1005
+Name: Design & Drill Creative Workshop
+Photos: C:\Users\Alina\Desktop\EducationalTpysPhotos\Design & Drill Creative Workshop
+Color: Multycolor
+Meterial: Plastic
+Type: Creative Educational toy
+Description:This construction kit helps foster STEM learning as budding builders learn about different
+drill bits (phillips, socket and flathead) for their motorized drill to use on their colorful bolts.
+The toy also includes a screwdriver and combination wrench to help complete the activity cards or create
+their own designs. For younger ones, the Design & Drill Bolt Buddies adds in colorful characters and playsets
+Price: 1700
+Age: 4+
