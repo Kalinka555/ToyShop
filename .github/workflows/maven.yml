@@ -22,3 +22,21 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: send program
+      uses: dawidd6/action-send-mail@v2
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: We've got a new version of ToyShop!
+        # Literal body:
+        body: Build job of ${{github.repository}} completed successfully!
+        to: tubist.fedor@gmail.com
+        from: Gihhub bot
+        # Optional content type (defaults to text/plain):
+        content_type: text/html
+        # Optional converting Markdown to HTML (set content_type to text/html too):
+        convert_markdown: true
+        # Optional attachments:
+        attachments: ./target/ToyShop.jar
