@@ -23,7 +23,7 @@ public class Application {
             "  java -jar ToyShop.jar [command] [options]\n" +
             "  Commands:\n" +
             "   list-products            Show all available products in the shop\n" +
-            "   /?, -?, -h, --help       Show help and usage information";
+            "   ?, /?, -?, -h, --help       Show help and usage information";
 
 
     public static void main(String[] args) throws IOException {
@@ -36,8 +36,8 @@ public class Application {
             String arg = args[0];
             if (arg.equals(COMMAND_LIST_PRODUCT)) {
                 System.out.println(allProductList);
-            } else if (arg.equals(COMMAND_QUESTION) || arg.equals(COMMAND_SLASH_QUESTION) || args.equals(COMMAND_MINUS_QUESTION)
-                    || args.equals(COMMAND_MINUS_HELP) || arg.equals(COMMAND_MINUS_H)) {
+            } else if (arg.equals(COMMAND_QUESTION) || arg.equals(COMMAND_SLASH_QUESTION) || arg.equals(COMMAND_MINUS_QUESTION)
+                    || arg.equals(COMMAND_MINUS_HELP) || arg.equals(COMMAND_MINUS_H)) {
                 System.out.println(USAGE_TEXT);
             } else System.out.println(WELCOME_TEXT);
         }
