@@ -35,21 +35,20 @@ public class Application {
 
     final private static String WELCOME_TEXT = "Welcome to our online shop";
     final private static String USAGE_TEXT = "Usage:\n" +
-            "  java -jar ToyShop.jar [command] [options]\n" +
-            "  Commands:\n" +
-            "    list-products            Shows all available products in the shop\n" +
-            "    ?, /?, -?, -h, --help    Shows help and usage information\n" +
-            "    create-order             Allows you to create an order with the following parameters: ID-number, quantity, delivery address.";
+            " java -jar ToyShop.jar [command] [options]\n" +
+            " Commands:\n" +
+            "  list-products            Shows all available products in the shop\n" +
+            "  ?, /?, -?, -h, --help    Shows help and usage information\n" +
+            "  create-order <id> <count> <deliveryAddress>   Allows to create an order with following parameters: ID-number, count, delivery address.";
     final private static String THANKS_TEXT = "  Your order number is № %d.\n" +
             "  Our manager will contact you to confirm the order. \n" +
             "  Thank you and we look forward to seeing you again in our store.\n";
-    final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must be from 100000 to 999999, try again.\n";
+    final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must be from 1000 to 9999, try again.\n";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Quantity - %d\n Delivery address -  %s\n";
 
     final private static Random RANDOM = new Random();
     final private static int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
     final private static String ORDER_FILE_NAME = "order-{" + ORDER_NUMBER + "}.txt";
-
 
     public static void main(String[] args) throws IOException {
 
@@ -69,12 +68,12 @@ public class Application {
 
             } else if (arg1.equals(COMMAND_ORDER)) {
                 int IDNumber = Integer.parseInt(args[1]);
-                int quantity = Integer.parseInt(args[2]);
+                int count = Integer.parseInt(args[2]);
                 String deliveryAddress = args[3];
-                if (IDNumber > 100000 && IDNumber < 1000000) {
+                if (IDNumber > 1000 && IDNumber < 10000) {
                     System.out.printf(THANKS_TEXT, ORDER_NUMBER);
                     PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
-                    orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, quantity, deliveryAddress);
+                    orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
                     orderFile.close();
                 } else System.out.println(WRONG_ID_NUMBER_TEXT);
 
