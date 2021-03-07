@@ -44,7 +44,7 @@ public class Application {
             "  Our manager will contact you to confirm the order. \n" +
             "  Thank you and we look forward to seeing you again in our store.\n";
     final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must be from 1000 to 9999, try again.\n";
-    final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Quantity - %d\n Delivery address -  %s\n";
+    final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
     final private static Random RANDOM = new Random();
     final private static int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
@@ -82,4 +82,3 @@ public class Application {
         }
     }
 }
-
