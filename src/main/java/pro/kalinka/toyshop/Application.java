@@ -1,16 +1,4 @@
 package pro.kalinka.toyshop;
-/**
- * Пользователь ToyShop должен иметь возможность внеcти информацию о желаемой покупке.
- * Для этого надо предусмотреть команду "create-order" со следующими опциями:
- * артикул (ID) товара
- * количество
- * адрес доставки
- * Опции - это тоже параметры командной строки, если что (java -jar ToyShop.jar [command] [options]).
- * Программа должна сгенерировать случайный номер заказа от 1 до 9999.
- * Информацию о созданном заказе программа должна сохранить в виде файла в текущей папке (cd), название файла формата order-{order_id}.txt, где {order_id} - это сгенерированный номер заказа.
- * В ответ на команду программа должна его подтвердить и поблагодарить за заказ.
- * Необходимо обновить help новой командой, и ещё программа должна показать пользователю номер заказа, конечно же.
- */
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,8 +10,8 @@ import java.util.Random;
 
 public class Application {
     final private static String ProductRegister = "C:\\Users\\Alina\\IdeaProjects\\ToyShop\\src\\main\\resources\\ProductRegister(Toys).txt";
-    final private static Charset CHARSET = StandardCharsets.UTF_8;
-    final private static Path PATH = Path.of(ProductRegister);
+    final private static Charset UNICODE = StandardCharsets.UTF_8;
+    final private static Path PATH_OF_LIST_PRODUCTS = Path.of(ProductRegister);
 
     final private static String COMMAND_LIST_PRODUCT = "list-products";
     final private static String COMMAND_QUESTION = "?";
@@ -43,23 +31,20 @@ public class Application {
     final private static String THANKS_TEXT = "  Your order number is № %d.\n" +
             "  Our manager will contact you to confirm the order. \n" +
             "  Thank you and we look forward to seeing you again in our store.\n";
-    final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must be from 1000 to 9999, try again.\n";
+    final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must include only numbers from 1000 to 9999, please try again.\n";
+    final private static String WRONG_COUNT_NUMBER_TEXT = "The count must include only number from 1 to 99, please try again.\n";
+    final private static String WRONG_ADDRESS_TEXT = "The address is not filled in, please try again";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
-    final private static Random RANDOM = new Random();
-    final private static int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
-    final private static String ORDER_FILE_NAME = "order-{" + ORDER_NUMBER + "}.txt";
-
-    public static void main(String[] args) throws IOException {
-
-        final String allProductList = Files.readString(PATH, CHARSET);
+    public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
             System.out.println(USAGE_TEXT);
 
-        } else if (args.length > 0) {
+        } else {
             String arg1 = args[0];
             if (arg1.equals(COMMAND_LIST_PRODUCT)) {
+                final String allProductList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
                 System.out.println(allProductList);
 
             } else if (arg1.equals(COMMAND_QUESTION) || arg1.equals(COMMAND_SLASH_QUESTION) || arg1.equals(COMMAND_MINUS_QUESTION)
@@ -67,18 +52,31 @@ public class Application {
                 System.out.println(USAGE_TEXT);
 
             } else if (arg1.equals(COMMAND_ORDER)) {
-                int IDNumber = Integer.parseInt(args[1]);
-                int count = Integer.parseInt(args[2]);
+                String IDNumberParameter = args[1];
+                String countParameter = args[2];
                 String deliveryAddress = args[3];
-                if (IDNumber > 1000 && IDNumber < 10000) {
-                    System.out.printf(THANKS_TEXT, ORDER_NUMBER);
+
+                int IDNumber = Integer.parseInt(IDNumberParameter);
+                int count = Integer.parseInt(countParameter);
+
+                if (IDNumber < 1001 || IDNumber > 10000) {
+                    System.out.println(WRONG_ID_NUMBER_TEXT);
+                } else if (count < 0 || count > 99) {
+                    System.out.println(WRONG_COUNT_NUMBER_TEXT);
+                } else if (deliveryAddress == null) {
+                    System.out.println(WRONG_ADDRESS_TEXT);
+                } else {
+                    final Random RANDOM = new Random();
+                    final int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
+                    final String ORDER_FILE_NAME = "order-" + ORDER_NUMBER + ".txt";
                     PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
                     orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
                     orderFile.close();
-                } else System.out.println(WRONG_ID_NUMBER_TEXT);
-
-            } else
+                    System.out.printf(THANKS_TEXT, ORDER_NUMBER);
+                }
+            } else {
                 System.out.println(WELCOME_TEXT);
+            }
         }
     }
 }
