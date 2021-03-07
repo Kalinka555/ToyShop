@@ -43,39 +43,47 @@ public class Application {
 
         } else {
             String arg1 = args[0];
-            if (arg1.equals(COMMAND_LIST_PRODUCT)) {
-                final String allProductList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
-                System.out.println(allProductList);
+            switch (arg1) {
+                case COMMAND_LIST_PRODUCT:
+                    final String allProductList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
+                    System.out.println(allProductList);
+                    break;
 
-            } else if (arg1.equals(COMMAND_QUESTION) || arg1.equals(COMMAND_SLASH_QUESTION) || arg1.equals(COMMAND_MINUS_QUESTION)
-                    || arg1.equals(COMMAND_MINUS_HELP) || arg1.equals(COMMAND_MINUS_H)) {
-                System.out.println(USAGE_TEXT);
+                case COMMAND_QUESTION:
+                case COMMAND_SLASH_QUESTION:
+                case COMMAND_MINUS_QUESTION:
+                case COMMAND_MINUS_HELP:
+                case COMMAND_MINUS_H:
+                    System.out.println(USAGE_TEXT);
+                    break;
+                    
+                case COMMAND_ORDER:
+                    String IDNumberParameter = args[1];
+                    String countParameter = args[2];
+                    String deliveryAddress = args[3];
 
-            } else if (arg1.equals(COMMAND_ORDER)) {
-                String IDNumberParameter = args[1];
-                String countParameter = args[2];
-                String deliveryAddress = args[3];
+                    int IDNumber = Integer.parseInt(IDNumberParameter);
+                    int count = Integer.parseInt(countParameter);
 
-                int IDNumber = Integer.parseInt(IDNumberParameter);
-                int count = Integer.parseInt(countParameter);
-
-                if (IDNumber < 1001 || IDNumber > 10000) {
-                    System.out.println(WRONG_ID_NUMBER_TEXT);
-                } else if (count < 0 || count > 99) {
-                    System.out.println(WRONG_COUNT_NUMBER_TEXT);
-                } else if (deliveryAddress == null) {
-                    System.out.println(WRONG_ADDRESS_TEXT);
-                } else {
-                    final Random RANDOM = new Random();
-                    final int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
-                    final String ORDER_FILE_NAME = "order-" + ORDER_NUMBER + ".txt";
-                    PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
-                    orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
-                    orderFile.close();
-                    System.out.printf(THANKS_TEXT, ORDER_NUMBER);
-                }
-            } else {
-                System.out.println(WELCOME_TEXT);
+                    if (IDNumber < 1001 || IDNumber > 10000) {
+                        System.out.println(WRONG_ID_NUMBER_TEXT);
+                    } else if (count < 0 || count > 99) {
+                        System.out.println(WRONG_COUNT_NUMBER_TEXT);
+                    } else if (deliveryAddress == null) {
+                        System.out.println(WRONG_ADDRESS_TEXT);
+                    } else {
+                        final Random RANDOM = new Random();
+                        final int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
+                        final String ORDER_FILE_NAME = "order-" + ORDER_NUMBER + ".txt";
+                        PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
+                        orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
+                        orderFile.close();
+                        System.out.printf(THANKS_TEXT, ORDER_NUMBER);
+                    }
+                    break;
+                default:
+                    System.out.println(WELCOME_TEXT);
+                    break;
             }
         }
     }
