@@ -34,19 +34,18 @@ public class Application {
             "  Thank you and we look forward to seeing you again in our store.\n";
     final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must include only numbers from 1000 to 9999, please try again.\n";
     final private static String WRONG_COUNT_NUMBER_TEXT = "The count must include only number from 1 to 99, please try again.\n";
-    final private static String PARAMETERS_NOT_FILLED = "One or more of following parameters: <id> <count> <delivery address>, were not filled in, please try again.";
+    final private static String PARAMETERS_NOT_FILLED = "One or more of following parameters: <id> <count> <delivery address>, were not filled in. Please try again.";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
     public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
-            String emptyCommand = usageText(args);
-        }
-        else {
+            System.out.println(usageText(args));
+        } else {
             String arg1 = args[0];
             switch (arg1) {
                 case COMMAND_LIST_PRODUCT:
-                    String allProductsList = listProducts(args);
+                    System.out.println(listProducts(args));
                     break;
 
                 case COMMAND_QUESTION:
@@ -54,14 +53,14 @@ public class Application {
                 case COMMAND_MINUS_QUESTION:
                 case COMMAND_MINUS_HELP:
                 case COMMAND_MINUS_H:
-                    String usage = usageText(arg1);
+                    System.out.println(usageText(arg1));
                     break;
 
                 case COMMAND_ORDER:
-                    String orderPlacing = orderPlacing(args);
+                    System.out.println(orderPlacing(args));
                     break;
                 default:
-                    String otherCases = otherCases(args);
+                    System.out.println(otherCases(args));
                     break;
             }
         }
@@ -69,16 +68,17 @@ public class Application {
 
     /**
      * метод возвращает информацию по использованию команд (usage information)
-      * @param args
+     *
+     * @param args
      * @return
      */
-    public static String usageText (String... args) {
-        System.out.println(USAGE_TEXT);
-       return USAGE_TEXT;
-        }
+    public static String usageText(String... args) {
+        return USAGE_TEXT;
+    }
 
     /**
      * метод возвращает перечень всей продукции с описанием и ценами при запросе "list-products" от клиента
+     *
      * @param args
      * @return
      */
@@ -96,6 +96,7 @@ public class Application {
 
     /**
      * метод для выявления буквенного ввода в параметры
+     *
      * @param input
      * @return
      */
@@ -121,7 +122,6 @@ public class Application {
             try {
                 throw new ArrayIndexOutOfBoundsException(PARAMETERS_NOT_FILLED);
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println(PARAMETERS_NOT_FILLED);
                 return PARAMETERS_NOT_FILLED;
             }
         }
@@ -129,22 +129,18 @@ public class Application {
         String countParameter = args[2];
         String deliveryAddress = args[3];
         if (isNumeric(IDNumberParameter)) {
-            System.out.println(WRONG_ID_NUMBER_TEXT);
             return WRONG_ID_NUMBER_TEXT;
         }
         if (isNumeric(countParameter)) {
-            System.out.println(WRONG_COUNT_NUMBER_TEXT);
             return WRONG_COUNT_NUMBER_TEXT;
         }
         int IDNumber = Integer.parseInt(IDNumberParameter);
         int count = Integer.parseInt(countParameter);
 
         if (IDNumber < 1001 || IDNumber > 10000) {
-            System.out.println(WRONG_ID_NUMBER_TEXT);
             return WRONG_ID_NUMBER_TEXT;
 
         } else if (count < 0 || count > 99) {
-            System.out.println(WRONG_COUNT_NUMBER_TEXT);
             return WRONG_COUNT_NUMBER_TEXT;
 
         } else {
@@ -158,7 +154,6 @@ public class Application {
             } catch (FileNotFoundException e) {
                 throw new FileNotFoundException("File not found");
             }
-            System.out.printf(THANKS_TEXT, ORDER_NUMBER);
             return String.format(THANKS_TEXT, ORDER_NUMBER);
         }
     }
@@ -166,11 +161,11 @@ public class Application {
     /**
      * метод возвращает приветственное сообщение клиенту при вводе любых значений,
      * кроме предусмотренных в информации по использованию команд (usage information)
+     *
      * @param args
      * @return
      */
     public static String otherCases(String[] args) {
-        System.out.println(WELCOME_TEXT);
         return WELCOME_TEXT;
     }
 }
