@@ -65,7 +65,7 @@ public class Application {
                     String orderPlacingResult = orderPlacing(args);
                     System.out.println(orderPlacingResult);
                     break;
-                    
+
                 default:
                     String otherCasesResult = otherCases(args);
                     System.out.println(otherCasesResult);
@@ -97,20 +97,19 @@ public class Application {
             System.out.println(allProductsList);
             return allProductsList;
         } catch (IOException e) {
-            e.printStackTrace();
+            return "Не удалось получить реестр товаров :((";
         }
-        return USAGE_TEXT;
     }
 
     /**
-     * Метод - для проверки, что в строке присутствую только цифры
+     * Метод проверяет,чтобы в строке присутствовали только цифры
      *
      * @param input
      * @return
      */
-    private static boolean isNotNumeric(String input) {
+    private static boolean isNumeric(String input) {
         if (input == null) return true;
-        return !input.matches("\\d+");
+        return input.matches("\\d+");
     }
 
     /**
@@ -127,19 +126,16 @@ public class Application {
      */
     public static String orderPlacing(String[] args) throws FileNotFoundException {
         if (args.length == 1 || args.length == 2 || args.length == 3) {
-            try {
-                throw new ArrayIndexOutOfBoundsException(PARAMETERS_NOT_FILLED);
-            } catch (ArrayIndexOutOfBoundsException e) {
                 return PARAMETERS_NOT_FILLED;
             }
-        }
+
         String IDNumberParameter = args[1];
         String countParameter = args[2];
         String deliveryAddress = args[3];
-        if (isNotNumeric(IDNumberParameter)) {
+        if (!isNumeric(IDNumberParameter)) {
             return WRONG_ID_NUMBER_FORMAT;
         }
-        if (isNotNumeric(countParameter)) {
+        if (!isNumeric(countParameter)) {
             return WRONG_COUNT_NUMBER_FORMAT;
         }
         int IDNumber = Integer.parseInt(IDNumberParameter);
