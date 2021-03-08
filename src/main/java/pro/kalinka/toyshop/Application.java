@@ -1,5 +1,6 @@
 package pro.kalinka.toyshop;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -27,26 +28,25 @@ public class Application {
             " Commands:\n" +
             "  list-products            Shows all available products in the shop\n" +
             "  ?, /?, -?, -h, --help    Shows help and usage information\n" +
-            "  create-order <id> <count> <deliveryAddress>   Allows to create an order with following parameters: ID-number, count, delivery address.";
+            "  create-order <id> <count> <delivery address>   Allows to create an order with following parameters: ID-number, count, delivery address.";
     final private static String THANKS_TEXT = "  Your order number is № %d.\n" +
             "  Our manager will contact you to confirm the order. \n" +
             "  Thank you and we look forward to seeing you again in our store.\n";
     final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must include only numbers from 1000 to 9999, please try again.\n";
     final private static String WRONG_COUNT_NUMBER_TEXT = "The count must include only number from 1 to 99, please try again.\n";
-    final private static String WRONG_ADDRESS_TEXT = "The address is not filled in, please try again";
+    final private static String PARAMETERS_NOT_FILLED = "One or more of following parameters: <id> <count> <delivery address>, were not filled in, please try again.";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
     public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
-            System.out.println(USAGE_TEXT);
-
-        } else {
+            String emptyCommand = usageText(args);
+        }
+        else {
             String arg1 = args[0];
             switch (arg1) {
                 case COMMAND_LIST_PRODUCT:
-                    final String allProductList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
-                    System.out.println(allProductList);
+                    String allProductsList = listProducts(args);
                     break;
 
                 case COMMAND_QUESTION:
@@ -54,37 +54,123 @@ public class Application {
                 case COMMAND_MINUS_QUESTION:
                 case COMMAND_MINUS_HELP:
                 case COMMAND_MINUS_H:
-                    System.out.println(USAGE_TEXT);
+                    String usage = usageText(arg1);
                     break;
-                    
+
                 case COMMAND_ORDER:
-                    String IDNumberParameter = args[1];
-                    String countParameter = args[2];
-                    String deliveryAddress = args[3];
-
-                    int IDNumber = Integer.parseInt(IDNumberParameter);
-                    int count = Integer.parseInt(countParameter);
-
-                    if (IDNumber < 1001 || IDNumber > 10000) {
-                        System.out.println(WRONG_ID_NUMBER_TEXT);
-                    } else if (count < 0 || count > 99) {
-                        System.out.println(WRONG_COUNT_NUMBER_TEXT);
-                    } else if (deliveryAddress == null) {
-                        System.out.println(WRONG_ADDRESS_TEXT);
-                    } else {
-                        final Random RANDOM = new Random();
-                        final int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
-                        final String ORDER_FILE_NAME = "order-" + ORDER_NUMBER + ".txt";
-                        PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
-                        orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
-                        orderFile.close();
-                        System.out.printf(THANKS_TEXT, ORDER_NUMBER);
-                    }
+                    String orderPlacing = orderPlacing(args);
                     break;
                 default:
-                    System.out.println(WELCOME_TEXT);
+                    String otherCases = otherCases(args);
                     break;
             }
         }
+    }
+
+    /**
+     * метод возвращает информацию по использованию команд (usage information)
+      * @param args
+     * @return
+     */
+    public static String usageText (String... args) {
+        System.out.println(USAGE_TEXT);
+       return USAGE_TEXT;
+        }
+
+    /**
+     * метод возвращает перечень всей продукции с описанием и ценами при запросе "list-products" от клиента
+     * @param args
+     * @return
+     */
+    public static String listProducts(String[] args) {
+
+        try {
+            final String allProductsList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
+            System.out.println(allProductsList);
+            return allProductsList;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return USAGE_TEXT;
+    }
+
+    /**
+     * метод для выявления буквенного ввода в параметры
+     * @param input
+     * @return
+     */
+    private static boolean isNumeric(String input) {
+        if (input == null) return true;
+        return !input.matches("\\d+");
+    }
+
+    /**
+     * метод для оформления заказа, предусматривает исключение пустых параметров и буквенного ввода в параметры "ID номер" и "количество";
+     * учитывает диапазон чисел для ID-номера и количества товара;
+     * выдает случайно сгенерированный номер заказа;
+     * создает текстовый файл с именем "order-NUMBER.txt", где NUMBER - это сгенерированный ранее номер заказа, и
+     * передает все внесенные клиентом параметры в данный текстовый файл;
+     * направляет клиенту подтвердение заказ с указанием номера заказа и благодарит клиента.
+     *
+     * @param args
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static String orderPlacing(String[] args) throws FileNotFoundException {
+        if (args.length == 1 || args.length == 2 || args.length == 3) {
+            try {
+                throw new ArrayIndexOutOfBoundsException(PARAMETERS_NOT_FILLED);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println(PARAMETERS_NOT_FILLED);
+                return PARAMETERS_NOT_FILLED;
+            }
+        }
+        String IDNumberParameter = args[1];
+        String countParameter = args[2];
+        String deliveryAddress = args[3];
+        if (isNumeric(IDNumberParameter)) {
+            System.out.println(WRONG_ID_NUMBER_TEXT);
+            return WRONG_ID_NUMBER_TEXT;
+        }
+        if (isNumeric(countParameter)) {
+            System.out.println(WRONG_COUNT_NUMBER_TEXT);
+            return WRONG_COUNT_NUMBER_TEXT;
+        }
+        int IDNumber = Integer.parseInt(IDNumberParameter);
+        int count = Integer.parseInt(countParameter);
+
+        if (IDNumber < 1001 || IDNumber > 10000) {
+            System.out.println(WRONG_ID_NUMBER_TEXT);
+            return WRONG_ID_NUMBER_TEXT;
+
+        } else if (count < 0 || count > 99) {
+            System.out.println(WRONG_COUNT_NUMBER_TEXT);
+            return WRONG_COUNT_NUMBER_TEXT;
+
+        } else {
+            final Random RANDOM = new Random();
+            final int ORDER_NUMBER = RANDOM.nextInt(9998) + 1;
+            final String ORDER_FILE_NAME = "order-" + ORDER_NUMBER + ".txt";
+            try {
+                PrintWriter orderFile = new PrintWriter(ORDER_FILE_NAME);
+                orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
+                orderFile.close();
+            } catch (FileNotFoundException e) {
+                throw new FileNotFoundException("File not found");
+            }
+            System.out.printf(THANKS_TEXT, ORDER_NUMBER);
+            return String.format(THANKS_TEXT, ORDER_NUMBER);
+        }
+    }
+
+    /**
+     * метод возвращает приветственное сообщение клиенту при вводе любых значений,
+     * кроме предусмотренных в информации по использованию команд (usage information)
+     * @param args
+     * @return
+     */
+    public static String otherCases(String[] args) {
+        System.out.println(WELCOME_TEXT);
+        return WELCOME_TEXT;
     }
 }
