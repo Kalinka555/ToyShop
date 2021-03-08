@@ -28,24 +28,28 @@ public class Application {
             " Commands:\n" +
             "  list-products            Shows all available products in the shop\n" +
             "  ?, /?, -?, -h, --help    Shows help and usage information\n" +
-            "  create-order <id> <count> <delivery address>   Allows to create an order with following parameters: ID-number, count, delivery address.";
+            "  create-order <id> <count> <deliveryAddress>   Allows to create an order with following parameters: ID-number, count, delivery address.";
     final private static String THANKS_TEXT = "  Your order number is № %d.\n" +
             "  Our manager will contact you to confirm the order. \n" +
             "  Thank you and we look forward to seeing you again in our store.\n";
     final private static String WRONG_ID_NUMBER_TEXT = "The ID-number must include only numbers from 1000 to 9999, please try again.\n";
-    final private static String WRONG_COUNT_NUMBER_TEXT = "The count must include only number from 1 to 99, please try again.\n";
+    final private static String WRONG_COUNT_NUMBER_TEXT = "The count must include only numbers from 1 to 99, please try again.\n";
+    final private static String WRONG_ID_NUMBER_FORMAT = "The ID-number must include only numbers, please try again.\n";
+    final private static String WRONG_COUNT_NUMBER_FORMAT = "The count must include only numbers, please try again.\n";
     final private static String PARAMETERS_NOT_FILLED = "One or more of following parameters: <id> <count> <delivery address>, were not filled in. Please try again.";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
     public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
-            System.out.println(usageText(args));
+            String usageTextResult = usageText(args);
+            System.out.println(usageTextResult);
         } else {
             String arg1 = args[0];
             switch (arg1) {
                 case COMMAND_LIST_PRODUCT:
-                    System.out.println(listProducts(args));
+                    String listProductResult = listProducts(args);
+                    System.out.println(listProductResult);
                     break;
 
                 case COMMAND_QUESTION:
@@ -53,14 +57,18 @@ public class Application {
                 case COMMAND_MINUS_QUESTION:
                 case COMMAND_MINUS_HELP:
                 case COMMAND_MINUS_H:
-                    System.out.println(usageText(arg1));
+                    String usageTextResult = usageText(arg1);
+                    System.out.println(usageTextResult);
                     break;
 
                 case COMMAND_ORDER:
-                    System.out.println(orderPlacing(args));
+                    String orderPlacingResult = orderPlacing(args);
+                    System.out.println(orderPlacingResult);
                     break;
+                    
                 default:
-                    System.out.println(otherCases(args));
+                    String otherCasesResult = otherCases(args);
+                    System.out.println(otherCasesResult);
                     break;
             }
         }
@@ -95,12 +103,12 @@ public class Application {
     }
 
     /**
-     * метод для выявления буквенного ввода в параметры
+     * Метод - для проверки, что в строке присутствую только цифры
      *
      * @param input
      * @return
      */
-    private static boolean isNumeric(String input) {
+    private static boolean isNotNumeric(String input) {
         if (input == null) return true;
         return !input.matches("\\d+");
     }
@@ -128,11 +136,11 @@ public class Application {
         String IDNumberParameter = args[1];
         String countParameter = args[2];
         String deliveryAddress = args[3];
-        if (isNumeric(IDNumberParameter)) {
-            return WRONG_ID_NUMBER_TEXT;
+        if (isNotNumeric(IDNumberParameter)) {
+            return WRONG_ID_NUMBER_FORMAT;
         }
-        if (isNumeric(countParameter)) {
-            return WRONG_COUNT_NUMBER_TEXT;
+        if (isNotNumeric(countParameter)) {
+            return WRONG_COUNT_NUMBER_FORMAT;
         }
         int IDNumber = Integer.parseInt(IDNumberParameter);
         int count = Integer.parseInt(countParameter);
@@ -152,7 +160,7 @@ public class Application {
                 orderFile.printf(ORDER_FILE_TEXT, ORDER_NUMBER, IDNumber, count, deliveryAddress);
                 orderFile.close();
             } catch (FileNotFoundException e) {
-                throw new FileNotFoundException("File not found");
+                return "Cannot save the order :(";
             }
             return String.format(THANKS_TEXT, ORDER_NUMBER);
         }
