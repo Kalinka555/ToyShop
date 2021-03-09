@@ -39,16 +39,16 @@ public class Application {
     final private static String PARAMETERS_NOT_FILLED = "One or more of following parameters: <id> <count> <delivery address>, were not filled in. Please try again.";
     final private static String ORDER_FILE_TEXT = " Order number - %d\n ID-number -  %d\n Count - %d\n Delivery address -  %s\n";
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) {
 
         if (args.length == 0) {
-            String usageTextResult = usageText(args);
+            String usageTextResult = usageText();
             System.out.println(usageTextResult);
         } else {
-            String arg1 = args[0];
-            switch (arg1) {
+            String command = args[0];
+            switch (command) {
                 case COMMAND_LIST_PRODUCT:
-                    String listProductResult = listProducts(args);
+                    String listProductResult = listProducts();
                     System.out.println(listProductResult);
                     break;
 
@@ -57,7 +57,7 @@ public class Application {
                 case COMMAND_MINUS_QUESTION:
                 case COMMAND_MINUS_HELP:
                 case COMMAND_MINUS_H:
-                    String usageTextResult = usageText(arg1);
+                    String usageTextResult = usageText();
                     System.out.println(usageTextResult);
                     break;
 
@@ -67,7 +67,7 @@ public class Application {
                     break;
 
                 default:
-                    String otherCasesResult = otherCases(args);
+                    String otherCasesResult = otherCases();
                     System.out.println(otherCasesResult);
                     break;
             }
@@ -77,27 +77,25 @@ public class Application {
     /**
      * метод возвращает информацию по использованию команд (usage information)
      *
-     * @param args
      * @return
      */
-    public static String usageText(String... args) {
+    public static String usageText() {
         return USAGE_TEXT;
     }
 
     /**
      * метод возвращает перечень всей продукции с описанием и ценами при запросе "list-products" от клиента
      *
-     * @param args
      * @return
      */
-    public static String listProducts(String[] args) {
+    public static String listProducts() {
 
         try {
             final String allProductsList = Files.readString(PATH_OF_LIST_PRODUCTS, UNICODE);
             System.out.println(allProductsList);
             return allProductsList;
         } catch (IOException e) {
-            return "Не удалось получить реестр товаров :((";
+            return "Cannot get product register :((";
         }
     }
 
@@ -124,10 +122,10 @@ public class Application {
      * @return
      * @throws FileNotFoundException
      */
-    public static String orderPlacing(String[] args) throws FileNotFoundException {
+    public static String orderPlacing(String[] args) {
         if (args.length == 1 || args.length == 2 || args.length == 3) {
-                return PARAMETERS_NOT_FILLED;
-            }
+            return PARAMETERS_NOT_FILLED;
+        }
 
         String IDNumberParameter = args[1];
         String countParameter = args[2];
@@ -166,10 +164,9 @@ public class Application {
      * метод возвращает приветственное сообщение клиенту при вводе любых значений,
      * кроме предусмотренных в информации по использованию команд (usage information)
      *
-     * @param args
      * @return
      */
-    public static String otherCases(String[] args) {
+    public static String otherCases() {
         return WELCOME_TEXT;
     }
 }
